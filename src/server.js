@@ -3,16 +3,24 @@
     npm install express --save
     npm install nodemon --save-dev
     npm install express-async-errors --save
+    npm install sqlite3 sqlite --save
+    npm install knex --save
+    npx knex init
+    npm install bcryptjs
 */
 
 require("express-async-errors")
 const AppError = require("./utils/AppError")
 
+const database = require("./database/sqlite")
+
 const express = require("express")
 
-const app = express()
-
 const routes = require("./routes")
+
+database()
+
+const app = express()
 
 app.use(express.json())
 
