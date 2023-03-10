@@ -9,8 +9,14 @@ class UsersControllers {
         if (!name) {
             throw new AppError("O nome é obrigatório!")
         }
-
-        const checkUserExists = await knex("users").where({ email })
+        if (!email) {
+            throw new AppError("O e-mail é obrigatório!")
+        }
+        if (!password) {
+            throw new AppError("A senha é obrigatória!")
+        }
+        
+        const [ checkUserExists ] = await knex("users").where({ email }) //desestruturação
 
         if (checkUserExists) {
             throw new AppError("Este e-mail já está em uso!")
@@ -27,16 +33,18 @@ class UsersControllers {
         const { name, email, password, old_password } = req.body
         const { id } = req.params
 
-        const user = await knex("users").where({ id })
+        const [ user ] = await knex("users").where({ id })
 
         if (!user) {
             throw new AppError("Usuário não encontrado!")
         }
 
-        const userWithUpdatedEmail = await knex("users").where({ email })
-
-        if (userWithUpdatedEmail && userWithUpdatedEmail.id != user.id) {
-            throw new AppError("Este e-mail já está em uso!")
+        if (email) {
+            const [ userWithUpdatedEmail ] = await knex("users").where({ email })
+                
+            if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+                throw new AppError("Este e-mail já está em uso!")
+            }
         }
 
         user.name = name ?? user.name
@@ -57,6 +65,14 @@ class UsersControllers {
         }
 
         await knex("users")
+        .where({ id })
+        .update({
+            name,
+            email,
+            password: user.password
+        })
+
+        return res.status(200).json()
 
     }
 
