@@ -76,12 +76,13 @@ class UsersControllers {
 
     }
 
-    async delete(req, res) {
+    /*async delete(req, res) {
         const { id } = req.params
         await knex("users").where({ id }).delete()
+        //await knex("notes").where({ user_id: id }).delete()
 
         return res.json()
-    }
+    }*/
 
 }
 
