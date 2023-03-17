@@ -11,6 +11,12 @@ class TagsController {
             throw new AppError("Usuário não encontrado!")
         }
 
+        const [ tagExists ] = await knex("tags").where({ user_id })
+
+        if (!tagExists) {
+            throw new AppError("Este usuário não criou tags!")
+        }
+
         const tags = await knex("tags").where({ user_id })
 
         return res.json(tags)

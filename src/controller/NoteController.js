@@ -68,6 +68,15 @@ class NotesController {
     async index(req, res) {
         const { user_id, title, tags } = req.query
 
+        const [ notesExists ] = await knex("notes")
+        .where({ user_id })
+        .whereLike("title", `%${title}%`)  //* achar ao pesquisar qualquer palavra do title (pesquisa na query do insomnia)
+        .orderBy("title") //* ordem alfabética
+        
+        if (!notesExists) {
+            throw new AppError("Nota não encontrada!")
+        }
+        
         let notes
 
         if (tags) {
