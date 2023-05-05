@@ -26,7 +26,7 @@ class UsersControllers {
 
         await knex("users").insert({name, email, password: hashedPassword})
 
-        res.status(201).json()
+        return res.status(201).json()
     }
 
     async update(req, res) {
