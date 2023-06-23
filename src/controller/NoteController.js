@@ -21,7 +21,7 @@ class NotesController {
             throw new AppError("A nota deve estar entre 0 e 5.")
         }
 
-        const note_id = await knex("notes").insert({
+        const [note_id] = await knex("notes").insert({
             title,
             description,
             rating: Number(rating.toFixed(1)),
