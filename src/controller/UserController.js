@@ -31,9 +31,9 @@ class UsersControllers {
 
     async update(req, res) {
         const { name, email, password, old_password } = req.body
-        const { id } = req.params
-
-        const [ user ] = await knex("users").where({ id })
+        const user_id = req.user.id  // criado no ensureAuthenticated (nao precisa mais passar nos params)
+                                    // em todas as notas que passam pelo middleware, muda e pega o user_id dessa forma
+        const [ user ] = await knex("users").where({ id: user_id })
 
         if (!user) {
             throw new AppError("Usuário não encontrado!")
@@ -65,7 +65,7 @@ class UsersControllers {
         }
 
         await knex("users")
-        .where({ id })
+        .where({ id: user_id })
         .update({
             name,
             email,

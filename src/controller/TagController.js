@@ -3,7 +3,7 @@ const AppError = require("../utils/AppError")
 
 class TagsController {
     async index(req, res) {
-        const { user_id } = req.params
+        const user_id = req.user.id
 
         const [ user ] = await knex("users").where({ id: user_id })
 

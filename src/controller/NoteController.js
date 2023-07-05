@@ -5,7 +5,7 @@ const { json } = require("express")
 class NotesController {
     async create(req, res) {
         const { title, description, rating, tags } = req.body
-        const { user_id } = req.params
+        const user_id = req.user.id
 
         const [ user ] = await knex("users").where({ id: user_id })
         
@@ -66,7 +66,8 @@ class NotesController {
     }
 
     async index(req, res) {
-        const { user_id, title, tags } = req.query
+        const { title, tags } = req.query
+        const user_id = req.user.id
 
         const [ notesExists ] = await knex("notes")
         .where({ user_id })
