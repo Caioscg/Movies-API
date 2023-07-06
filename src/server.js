@@ -7,10 +7,13 @@
     npm install knex --save
     npx knex init
     npm install bcryptjs
+    npm install jsonwebtoken
+    npm install multer
 */
 
 require("express-async-errors")
 const AppError = require("./utils/AppError")
+const uploadConfig = require("./configs/uploads")
 
 const database = require("./database/sqlite")
 
@@ -23,6 +26,8 @@ database()
 const app = express()
 
 app.use(express.json())
+
+app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER))  // load da foto para ela aparecer
 
 app.use(routes)
 
