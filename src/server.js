@@ -9,6 +9,7 @@
     npm install bcryptjs
     npm install jsonwebtoken
     npm install multer
+    npm install cors
 */
 
 require("express-async-errors")
@@ -17,14 +18,14 @@ const uploadConfig = require("./configs/uploads")
 
 const database = require("./database/sqlite")
 
+const cors = require("cors")  // (ajuda na integração front e back)
 const express = require("express")
-
 const routes = require("./routes")
 
 database()
 
 const app = express()
-
+app.use(cors())
 app.use(express.json())
 
 app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER))  // load da foto para ela aparecer
