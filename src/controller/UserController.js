@@ -61,6 +61,10 @@ class UsersControllers {
                 throw new AppError("A senha antiga não confere!")
             }
 
+            if (password == old_password) {
+                throw new AppError("As duas senhas são iguais!")
+            }
+
             user.password = await hash(password, 8)
         }
 
