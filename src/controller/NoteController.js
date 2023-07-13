@@ -7,24 +7,10 @@ class NotesController {
         const { title, description, rating, tags } = req.body
         const user_id = req.user.id
 
-        const [ user ] = await knex("users").where({ id: user_id })
-        
-        if (!user) {
-            throw new AppError("Usuário não encontrado!")
-        }
-
-        if (!title) {
-            throw new AppError("Título é obrigatório!")
-        }
-
-        if (rating && rating < 0 || rating > 5) {
-            throw new AppError("A nota deve estar entre 0 e 5.")
-        }
-
         const [note_id] = await knex("notes").insert({
             title,
             description,
-            rating: Number(rating.toFixed(1)),
+            rating,
             user_id
         })
 
