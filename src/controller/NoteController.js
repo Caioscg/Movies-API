@@ -14,15 +14,17 @@ class NotesController {
             user_id
         })
 
-        const tagsInsert = tags.map(name => {
-            return {
-                note_id,
-                name,
-                user_id
-            }
-        })
-
-        await knex("tags").insert(tagsInsert)
+        if (tags.length > 0) {
+            const tagsInsert = tags.map(name => {
+                return {
+                    note_id,
+                    name,
+                    user_id
+                }
+            })
+    
+            await knex("tags").insert(tagsInsert)
+        }
 
         return res.json()
     }
