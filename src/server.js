@@ -10,9 +10,14 @@
     npm install jsonwebtoken
     npm install multer
     npm install cors
+    npm install dotenv --save
+    npx pm2 init
+    npm install pm2 
 */
 
+require("dotenv/config")
 require("express-async-errors")
+
 const AppError = require("./utils/AppError")
 const uploadConfig = require("./configs/uploads")
 
