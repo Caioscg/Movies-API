@@ -54,41 +54,13 @@ class NotesController {
     }
 
     async index(req, res) {
-        const { title, tags } = req.query
+        const { title } = req.query
         const user_id = req.user.id
 
-        const [ notesExists ] = await knex("notes")
+        const notes = await knex("notes")
         .where({ user_id })
         .whereLike("title", `%${title}%`)  //* achar ao pesquisar qualquer palavra do title (pesquisa na query do insomnia)
         .orderBy("title") //* ordem alfabética
-        
-        if (!notesExists) {
-            throw new AppError("Nota não encontrada!")
-        }
-        
-        let notes
-
-        if (tags) {
-            const filterTags = tags.split(',').map(tag => tag.trim())  // para unir as tags em um vetor separado por ','
-
-            notes = await knex("tags")      //! quando eu pesquiso uma tag existente ele linka mostrando as informações da note
-                .select([                                           //*? seleciona esses campos da table notes
-                    "notes.id",
-                    "notes.title",
-                    "notes.user_id"
-                ])
-                .where("notes.user_id", user_id)                    //*? busca as notas do id de user passado no query
-                .whereLike("notes.title", `%${title}%`)             //*? e dentro desse id, busca a note com o titulo digitado
-                .whereIn("name", filterTags)                        //*? compara se o nome digitado pertence ao array
-                .innerJoin("notes", "notes.id", "tags.note_id")     //*? estou juntando a tags com a notes por meio do notes_id
-                .orderBy("notes.title")
-
-        } else {
-            notes = await knex("notes")
-            .where({ user_id })
-            .whereLike("title", `%${title}%`)  //* achar ao pesquisar qualquer palavra do title (pesquisa na query do insomnia)
-            .orderBy("title") //* ordem alfabética
-        }
 
         const userTags = await knex("tags").where({ user_id })
         const notesWithTags = notes.map(note => {
